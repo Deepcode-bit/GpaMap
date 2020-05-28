@@ -1,0 +1,2 @@
+rootProject.name='野外地质实践助手'
+include ':app'
