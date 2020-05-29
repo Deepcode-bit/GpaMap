@@ -1,4 +1,4 @@
-package com.nepu.gpamap;
+package com.nepu.gpamap.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,16 +6,22 @@ import android.os.Bundle;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMapOptions;
 import com.baidu.mapapi.map.MapView;
+import com.nepu.gpamap.maps.MLocation;
 
 public class MainActivity extends Activity {
     private MapView mapView = null;
+    private BaiduMap mBaiduMap=null;
+    private MLocation location=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BaiduMapOptions options = new BaiduMapOptions();
-        //设置地图模式为卫星地图
-        options.mapType(BaiduMap.MAP_TYPE_SATELLITE);
+        options.mapType(BaiduMap.MAP_TYPE_NORMAL);
         mapView = new MapView(this, options);
+        mBaiduMap=mapView.getMap();
+        mBaiduMap.setMyLocationEnabled(true);
+        location=new MLocation(mBaiduMap);
+        location.StartLocation(this);
         setContentView(mapView);
     }
     @Override
@@ -35,5 +41,7 @@ public class MainActivity extends Activity {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mapView.onDestroy();
+        mBaiduMap.setMyLocationEnabled(false);
+        location.StopLocation();
     }
 }
